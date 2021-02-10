@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-cn" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hadoop &mdash; test vtest</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="数据库优化" href="database_optimization.html" />
+    <link rel="prev" title="数据库数据字典" href="data_directory.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> database
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL 操作总结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_directory.html">数据库数据字典</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hadoop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#header-n3">0.环境配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header-n13">1.Hadoop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#header-n14">1.1 Hadoop架构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#header-n16">Hadoop是什么?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n48">分布式存储、分布式计算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n50">Hadoop构造模块</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#header-n87">1.2 Hadoop集群安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#header-n88">1.3 Hadoop运行</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hdfs">2．HDFS文件操作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#header-n102">2.1 Hadoop基本文件命令</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#uri">2.1.1 指定文件和目录确切位置的URI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n140">2.1.2 基本形式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n148">2.1.3 基本文件命令</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#yarn">2.2 yarn命令行</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#header-n190">1.查看帮助</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n192">2.查看提交到集群上的所有任务</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n194">3.杀死某个任务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mapreduce">3. MapReduce程序</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#header-n201">3.1 MapReduce程序通过操作键值对来处理数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#header-n207">3.2 Hadoop 数据类型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mapper">3.3 Mapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reducer">3.4 Reducer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partitioner-mapper">3.5 Partitioner: 重定向Mapper的输出</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#combiner-reduce">3.6 Combiner: 本地reduce</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#header-n312">4.读/写</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database_optimization.html">数据库优化</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">database</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Hadoop</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Hadoop.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hadoop">
+<span id="header-n0"></span><h1>Hadoop<a class="headerlink" href="#hadoop" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="header-n3">
+<span id="id1"></span><h2>0.环境配置<a class="headerlink" href="#header-n3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Java:Java 1.6及以上版本;</p></li>
+<li><p>OS: Linux;</p></li>
+<li><p>Hadoop</p></li>
+</ul>
+</div>
+<div class="section" id="header-n13">
+<span id="id2"></span><h2>1.Hadoop<a class="headerlink" href="#header-n13" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="header-n14">
+<span id="id3"></span><h3>1.1 Hadoop架构<a class="headerlink" href="#header-n14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="header-n16">
+<span id="id4"></span><h4>Hadoop是什么?<a class="headerlink" href="#header-n16" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>Google率先提出了MapReduce用来应对数据处理需求的系统,Doug
+Cutting领导开发了一个开源版本的MapReduce,称为Hadoop.</p></li>
+<li><p>Hadoop是一个开源框架,可编写和运行分布式应用处理大规模数据;</p></li>
+<li><p>方便:
+Hadoop运行在由一般商用机器构成的大型集群上,或者如Amazon弹性计算云(EC2)等云服务器之上;</p></li>
+<li><p>健壮:
+Hadoop致力于在一般商用硬件上运行,其架构假设硬件会频繁地出现失效.它可以从容地处理大多数此类故障;</p></li>
+<li><p>可扩展: Hadoop通过增加集群节点,可以线性地扩展以处理更大的数据集;</p></li>
+<li><p>简单: Hadoop允许用户快速编写出高效的并行代码;</p></li>
+<li><p>Hadoop集群</p></li>
+<li><p>Hadoop集群是在同一地点用网络互联的一组通用机器.数据存储和处理都发生在这个机器”云”中.不同的用户可以从独立的客户端提交计算作业到Hadoop,这些客户端可以是远离Hadoop集群的个人台式机;</p></li>
+<li><p>通常在一个Hadoop集群中的机器都是相对同构的x86
+Linux服务器.而且它们几乎位于同一个数据中心,并且通常在同一组机架里;</p></li>
+<li><p>Hadoop强调把代码向数据迁移,而不是相反的过程;</p></li>
+<li><p>Hadoop的集群环境中既包含数据又包含计算环境,客户端仅需发送待执行的MapReduce程序,而这些程序一般都很小(通常为几千字节).</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="header-n48">
+<span id="id5"></span><h4>分布式存储、分布式计算<a class="headerlink" href="#header-n48" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="header-n50">
+<span id="id6"></span><h4>Hadoop构造模块<a class="headerlink" href="#header-n50" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>在一个全配置的集群上，“运行Hadoop”意味着在网络分布的不同服务器上运行一组守护进程(daemons)。这些守护进程有着特殊的角色，一些仅存在单个服务器上，一些则运行在多个服务器上：</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>NameNode(名字节点)</p></li>
+<li><p>DataNode(数据节点)</p></li>
+<li><p>Secondary NameNode(次名字节点)</p></li>
+<li><p>JobTracker(作业跟踪节点)</p></li>
+<li><p>TaskTracker(任务跟踪节点)</p></li>
+</ul>
+<div class="section" id="namenode">
+<span id="header-n64"></span><h5>NameNode<a class="headerlink" href="#namenode" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><p>Hadoop在分布式计算机与分布式存储中都采用了<strong>主/从(master/slave)</strong>结构；</p></li>
+<li><p>分布式存储系统被称为Hadoop文件系统，或简称HDFS；</p></li>
+<li><p><strong>NameNode</strong>位于HDFS的主端，它指导<strong>从端的DataNode</strong>执行底层的I/O任务；NameNode是HDFS的书记员，他跟踪文件如何被分割成文件块，而这些块又被哪些节点存储，以及分布式文件系统的整体运行状态是否正常；</p></li>
+<li><p>运行NameNode会消耗大量的内存和I/O资源，因此，为了减轻机器的负载，驻留在NameNode的服务器通常不会存储用户数据或者执行MapReduce程序的计算任务，这意味着NameNode服务器不会同时是DataNode或者TaskTracker；</p></li>
+</ul>
+</div>
+<div class="section" id="jobtracker">
+<span id="header-n75"></span><h5>JobTracker<a class="headerlink" href="#jobtracker" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>JobTracker守护进程是应用程序和Hadoop之间的纽带；每个Hadoop集群只有一个JobTracker守护进程，通常位于服务器集群的主节点上；</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>一旦提交代码到集群上，JobTracker就会确定执行计划，包括决定处理哪些文件、为不同的任务分配节点以及监控所有任务的运行；</p></li>
+<li><p>如果任务失败，JobTracker将自动重启任务，但分配的节点可能会不同，同时受到预定义的重试次数限制；</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="header-n87">
+<span id="id7"></span><h3>1.2 Hadoop集群安装<a class="headerlink" href="#header-n87" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="header-n88">
+<span id="id8"></span><h3>1.3 Hadoop运行<a class="headerlink" href="#header-n88" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="hdfs">
+<span id="header-n93"></span><h2>2．HDFS文件操作<a class="headerlink" href="#hdfs" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>HDFS是一种文件系统，专为MapReduce这类框架下的大规模分布式数据处理设计，可以把一个大数据集在HDFS中存储位单个文件，而大多数其它的文件系统无力实现这一点。</p></li>
+<li><p>HDFS并不是一个天生的Unix文件系统，不支持标准的Unix文件命令和操作；Hadoop提供了一套与Linux文件命令类似的命令行工具，即Hadoop操作文件的shell命令，它们是与HDFS系统的主要借口；</p></li>
+<li><p>一个典型的Hadoop工作流会： －
+在别的地方生成数据文件(如日志文件),再将其复制到HDFS中 －
+接着由MapReduce程序处理这个数据，但它们通常不会直接读任何一个HDFS文件，相反，它们依靠MapReduce框架来读取HDFS文件，并将其解析为独立的记录(键值对),这些记录才是MapReduce程序所处理的数据单元，除非需要定制数据的导入与导出，否则几乎不必编程来读写HDFS文件；</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="header-n102">
+<span id="id9"></span><h3>2.1 Hadoop基本文件命令<a class="headerlink" href="#header-n102" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>添加目录和文件</p></li>
+<li><p>获取文件</p></li>
+<li><p>删除文件</p></li>
+</ol>
+<div class="section" id="uri">
+<span id="header-n110"></span><h4>2.1.1 指定文件和目录确切位置的URI<a class="headerlink" href="#uri" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>Hadoop的文件命令既可以与HDFS文件系统交互，也可以和本地文件系统交互；</p></li>
+<li><p>URI精确地定位一个特定文件或目录的位置，完整的URI格式为<code class="docutils literal notranslate"><span class="pre">scheme//authority/path</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scheme</span></code>类似于一个协议，它可以是<code class="docutils literal notranslate"><span class="pre">hdfs</span></code>或<code class="docutils literal notranslate"><span class="pre">file</span></code>，分别指定HDFS文件系统或本地文件系统；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">authority</span></code>是HDFS中NameNode的主机名；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code>是文件或目录的路径；</p></li>
+<li><p>例如，对于在本地机器的9000端口上，以标准伪分布式模型运行的HDFS，访问用户目录/user/chunk中文件example.txt的URI：<code class="docutils literal notranslate"><span class="pre">hdfs://localhost:9000/user/chuck/example.txt</span></code></p></li>
+<li><p>大多数设置不需要制定URI中的<code class="docutils literal notranslate"><span class="pre">scheme://authority</span></code>部分；</p></li>
+<li><p>当在本地文件系统和HDFS之间复制文件时，Hadoop中的命令会分别吧本地文件熊作为源和目的，而不需要制定scheme为file；</p></li>
+<li><p>对于其他命令，如果未设置URI中的<code class="docutils literal notranslate"><span class="pre">scheme://authority</span></code>，就会采用Hadoop的默认设置；</p>
+<ul>
+<li><p>假如<code class="docutils literal notranslate"><span class="pre">conf/core-site.xml</span></code>文件已经更改为伪分布式配置，则文件中的<code class="docutils literal notranslate"><span class="pre">fs.default.name</span></code>属性应为<code class="docutils literal notranslate"><span class="pre">hdfs://localhost:9000</span></code>。在此配置下，URI<code class="docutils literal notranslate"><span class="pre">hdfs://localhost:9000/user/chuck/example.txt</span></code>可以缩短为<code class="docutils literal notranslate"><span class="pre">/user/chuck/example.txt</span></code></p></li>
+<li><p>HDFS默认当前工作目录为<code class="docutils literal notranslate"><span class="pre">/user/$USER</span></code>，其中<code class="docutils literal notranslate"><span class="pre">$USER</span></code>是登录用户名，如果作为<code class="docutils literal notranslate"><span class="pre">chuck</span></code>登录，则URI<code class="docutils literal notranslate"><span class="pre">hdfs://localhost:9000/user/chuck/example.txt</span></code>就缩短为<code class="docutils literal notranslate"><span class="pre">example</span></code>；</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="header-n140">
+<span id="id10"></span><h4>2.1.2 基本形式<a class="headerlink" href="#header-n140" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># method 1</span>
+$ hadoop fs -cmd &lt;args&gt;
+
+<span class="c1"># method 2</span>
+$ hadoop dfs -cmd &lt;args&gt;
+
+<span class="c1"># method 3</span>
+$ <span class="nb">alias</span> <span class="nv">hdfs</span><span class="o">=</span><span class="s2">&quot;hadoop dfs&quot;</span>
+$ hdfs -cmd &lt;args&gt;
+</pre></div>
+</div>
+<p>其中</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cmd</span></code>：特定的文件命令；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;args&gt;</span></code>：一个数目可变的参数；</p></li>
+</ul>
+</div>
+<div class="section" id="header-n148">
+<span id="id11"></span><h4>2.1.3 基本文件命令<a class="headerlink" href="#header-n148" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="header-n149">
+<span id="id12"></span><h5>1.查看帮助<a class="headerlink" href="#header-n149" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ hadoop dfs -help &lt;cmd&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n151">
+<span id="id13"></span><h5>2.查看目录<a class="headerlink" href="#header-n151" title="Permalink to this headline">¶</a></h5>
+<p>查看某个目录：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ hadoop dfs -ls &lt;path&gt;
+</pre></div>
+</div>
+<p>查看当前目录：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>hadoop dfs -ls /
+</pre></div>
+</div>
+<p>查看当前目录下的文件和子目录，类似于<code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-r</span></code>：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ hadoop dfs -lsr /
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n158">
+<span id="id14"></span><h5>3.创建、删除文件夹<a class="headerlink" href="#header-n158" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><p>删除一般是删除到<code class="docutils literal notranslate"><span class="pre">.Trash</span></code>中，一般有一定的时效清空的，如果误删可以找回；</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 创建</span>
+$ hadoop dfs -mkdir &lt;/hadoop dir path/dir name&gt;
+$ hadoop dfs -mkdir -p &lt;/hadoop dir path/dir name&gt;
+
+<span class="c1"># 删除</span>
+$ hadoop dfs -rmr &lt;hadoop dir path&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n163">
+<span id="id15"></span><h5>4.创建、删除空文件<a class="headerlink" href="#header-n163" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><p>删除一般是删除到<code class="docutils literal notranslate"><span class="pre">.Trash</span></code>中，一般有一定的时效清空的，如果误删可以找回；</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 创建</span>
+$ hadoop dfs -touchz &lt;/hadoop file path/file name&gt;
+
+<span class="c1"># 删除</span>
+$ hadoop dfs -rm &lt;hadoop file path&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n169">
+<span id="id16"></span><h5>5.检索文件<a class="headerlink" href="#header-n169" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><p>复制；</p></li>
+<li><p>移动或重命名；</p></li>
+<li><p>从HDFS中下载文件到本地文件系统；</p></li>
+<li><p>从本地文件系统复制文件到HDFS中；</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 复制</span>
+$ hadoop dfs -cp &lt;hadoop <span class="nb">source</span> file path &gt; &lt;hadoop target file path&gt;
+$ hadoop dfs -cp -r &lt;hadoop <span class="nb">source</span> path&gt; &lt;hadoop target path&gt;
+
+
+<span class="c1"># 移动、重命名</span>
+$ hadoop dfs -mv &lt;hadoop <span class="nb">source</span> path&gt; &lt;hadoop target path&gt;
+
+<span class="c1"># HDFS =&gt; local(从HDFS上把文件或文件夹下载到本地)</span>
+$ hadoop dfs -get &lt;hadoop <span class="nb">source</span> path&gt; &lt;<span class="nb">local</span> target path&gt;
+$ hadoop dfs -copyToLocal &lt;hadoop <span class="nb">source</span> path&gt; &lt;<span class="nb">local</span> target path&gt;
+
+<span class="c1"># 将HDFS上一个目录下的所有文件合并成一个文件下载到本地</span>
+$ hadoop dfs -getmerge &lt;hadoop dir path&gt; &lt;<span class="nb">local</span> file path&gt;
+
+<span class="c1"># local =&gt; HDFS(上传本地文件或文件夹到HDFS)</span>
+$ hadoop dfs -put &lt;<span class="nb">local</span> <span class="nb">source</span> path&gt; &lt;hadoop target path&gt;
+$ hadoop dfs -copyFromLocal &lt;<span class="nb">local</span> <span class="nb">source</span> path&gt; &lt;hadoop target path&gt;
+$ hadoop dfs -moveToLocal &lt;<span class="nb">local</span> <span class="nb">source</span> path&gt; &lt;hadoop target path&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n181">
+<span id="id17"></span><h5>6.查看文件内容<a class="headerlink" href="#header-n181" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ hadoop dfs -cat &lt;hadoop file path&gt;
+$ hadoop dfs -text &lt;hadoop file path&gt;
+
+$ hadoop dfs -tail &lt;hadoop file path&gt;
+$ hadoop dfs -tail -f &lt;hadoop file path&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n183">
+<span id="id18"></span><h5>7.查看文件、文件夹大小<a class="headerlink" href="#header-n183" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 字节为单位展示</span>
+$ hadoop dfs -du &lt;hadoop file path&gt;
+
+<span class="c1"># GB为单位展示</span>
+$ hadoop dfs -du -s -h &lt;hadoop file path&gt;
+
+<span class="c1"># 查看文件夹下每个文件大小</span>
+$ hadoop dfs -du -s -h &lt;hadoop dir path/*&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n185">
+<span id="id19"></span><h5>8.判断文件、目录、大小<a class="headerlink" href="#header-n185" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 检查文件是否存在，存在返回0</span>
+$ hadoop dfs -test -e filename
+
+<span class="c1"># 检查文件是否是0字节，是返回0</span>
+$ hadoop dfs -test -z filename
+
+<span class="c1"># 检查文件是否是目录，是返回1，否则返回0</span>
+$ hadoop dfs -test -d filename
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="yarn">
+<span id="header-n188"></span><h3>2.2 yarn命令行<a class="headerlink" href="#yarn" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="header-n190">
+<span id="id20"></span><h4>1.查看帮助<a class="headerlink" href="#header-n190" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ yarn application --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n192">
+<span id="id21"></span><h4>2.查看提交到集群上的所有任务<a class="headerlink" href="#header-n192" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ yarn application -list
+</pre></div>
+</div>
+</div>
+<div class="section" id="header-n194">
+<span id="id22"></span><h4>3.杀死某个任务<a class="headerlink" href="#header-n194" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ yarn application -kill &lt;applicationId&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="mapreduce">
+<span id="header-n199"></span><h2>3. MapReduce程序<a class="headerlink" href="#mapreduce" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="header-n201">
+<span id="id23"></span><h3>3.1 MapReduce程序通过操作键值对来处理数据<a class="headerlink" href="#header-n201" title="Permalink to this headline">¶</a></h3>
+<p>一般形式:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">map</span><span class="p">:</span> <span class="p">(</span><span class="n">K1</span><span class="p">,</span> <span class="n">V1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">K2</span><span class="p">,</span> <span class="n">V2</span><span class="p">)</span>
+<span class="n">reduce</span><span class="p">:</span> <span class="p">(</span><span class="n">K2</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">V2</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">K3</span><span class="p">,</span> <span class="n">V3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>高阶视图:</p>
+</div>
+<div class="section" id="header-n207">
+<span id="id24"></span><h3>3.2 Hadoop 数据类型<a class="headerlink" href="#header-n207" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="mapper">
+<span id="header-n210"></span><h3>3.3 Mapper<a class="headerlink" href="#mapper" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>一个类要作为mapper,需要继承MapReduceBase基类,并且实现Mapper接口;
+MapReduceBase基类包含了类的构造与解构方法;</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>void configure (JobConf job)</p>
+<ul>
+<li><p>该函数提取XML配置文件或应用程序主类中的参数,在数据处理之前调用该函数;</p></li>
+</ul>
+</li>
+<li><p>void close()</p>
+<ul>
+<li><p>作为map任务结束前的最后一个操作,该函数完成所有的结尾工作,如关闭数据库连接,关闭文件等;</p></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<div><p>Mapper接口负责数据处理阶段.它采用的形式为<code class="docutils literal notranslate"><span class="pre">Mapper&lt;K1,</span> <span class="pre">V1,</span> <span class="pre">K2,</span> <span class="pre">V2&gt;</span></code>的java泛型,这里的键类和值类分别实现<code class="docutils literal notranslate"><span class="pre">WritableComparable</span></code>和<code class="docutils literal notranslate"><span class="pre">Writable</span></code>接口.Mapper只有一个方法:<code class="docutils literal notranslate"><span class="pre">map</span></code>,用于处理一个单独的键/值对:</p>
+</div></blockquote>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">map</span><span class="p">(</span><span class="n">K1</span> <span class="n">key</span><span class="p">,</span>
+              <span class="n">V1</span> <span class="n">value</span><span class="p">,</span>
+              <span class="n">OutputCollector</span><span class="o">&lt;</span><span class="n">K2</span><span class="p">,</span> <span class="n">V2</span><span class="o">&gt;</span> <span class="n">output</span><span class="p">,</span>
+              <span class="n">Reporter</span> <span class="n">reporter</span>
+              <span class="p">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>该函数处理一个给定的键/值对(K1, V1),生成一个键/值对(K2,
+V2)的列表(该列表可能为空);</p></li>
+<li><p>OutputCollector接收上面的映射过程的输出;</p></li>
+<li><p>Reporter可提供对mapper相关附加信息的记录,形成任务进度;</p></li>
+</ul>
+<blockquote>
+<div><p>Hadoop提供了一些有用的mapper实现:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IdentityMapper&lt;K,</span> <span class="pre">V&gt;</span></code></p>
+<ul>
+<li><p>实现Mapper&lt;K, V, K, V&gt;, 将输入直接映射到输出</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InverseMapper&lt;K,</span> <span class="pre">V&gt;</span></code></p>
+<ul>
+<li><p>实现Mapper&lt;K, V, K, V&gt;, 反转键/值对</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RegexMapper&lt;K&gt;</span></code></p>
+<ul>
+<li><p>实现Mapper&lt;K, Text, Text,
+LongWritable&gt;,为每个常规表达式的匹配项生成一个(match, 1)对</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TokenCountMapper&lt;K&gt;</span></code></p>
+<ul>
+<li><p>实现Mapper&lt;K, Text, Text,
+LongWritable&gt;,当输入的值为分词时,生成一个(token, 1)对</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="reducer">
+<span id="header-n258"></span><h3>3.4 Reducer<a class="headerlink" href="#reducer" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>一个类要作为reducer,需要继承MapReduceBase基类,
+允许配置和清理.并且实现Reducer接口;
+MapReduceBase基类包含了类的构造与解构方法;</p>
+</div></blockquote>
+<blockquote>
+<div><p>Reducer只有一个方法:<code class="docutils literal notranslate"><span class="pre">reduce</span></code>:</p>
+</div></blockquote>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">reduce</span><span class="p">(</span><span class="n">K2</span> <span class="n">key</span><span class="p">,</span>
+                     <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">V2</span><span class="o">&gt;</span> <span class="n">values</span><span class="p">,</span>
+                     <span class="n">OutputCollector</span><span class="o">&lt;</span><span class="n">K3</span><span class="p">,</span> <span class="n">V3</span><span class="o">&gt;</span> <span class="n">output</span><span class="p">,</span>
+                     <span class="n">Reporter</span> <span class="n">reporter</span><span class="p">,</span>
+                     <span class="p">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>当reducer任务接收来自各个mapper的输出时,它按照键/值对中的键对输入数据进行排序,并将相同键的值归并.然后调用reduce()函数,并通过迭代处理那些与指定键相关联的值,生成一个(可能为空)的列表(K3,
+V3).</p></li>
+<li><p>OutputCollecotr接收reduce阶段的输出,并写入输出文件;</p></li>
+<li><p>Reporter可提供对reducer相关附加信息的记录,形成任务进度;</p></li>
+</ul>
+<blockquote>
+<div><p>Hadoop提供了一些基本的reducer实现</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IdentityReducer&lt;K,</span> <span class="pre">V&gt;</span></code></p>
+<ul>
+<li><p>实现Reducer&lt;K, V, K, V&gt;,将输入直接映射到输出</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LongSumReducer&lt;K&gt;</span></code></p>
+<ul>
+<li><p>实现&lt;K, LongWritable, K,
+LongWritable&gt;,计算与给定键相对应的所有值的和</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="partitioner-mapper">
+<span id="header-n285"></span><h3>3.5 Partitioner: 重定向Mapper的输出<a class="headerlink" href="#partitioner-mapper" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>虽然将Hadoop程序称为MapReduce应用,但是在map和reduce两个阶段之间还有一个及其重要的步骤:将mapper的结果输出给不同的reducer.这就是partitioner的工作.
+一个MapReduce应用需要使用多个reducer,但是,当使用多个reducer时,就需要采取一些办法来确定mapper应该把键值对输出给谁.</p>
+<ul class="simple">
+<li><p>默认的做法是对键进行散列来确定reducer.Hadoop通过<code class="docutils literal notranslate"><span class="pre">HashPartitioner</span></code>类强制执行这个策略.但有时HashPartitioner会让你出错.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>一个定制的partitioner只需要实现<code class="docutils literal notranslate"><span class="pre">configure()</span></code>和<code class="docutils literal notranslate"><span class="pre">getPartition()</span></code>两个函数.</p>
+<ul>
+<li><p>configure()将Hadoop对作业的配置应用在partition上;</p></li>
+<li><p>getPartition()返回一个介于0和reduce任务数之间的整数,指向键/值对将要发送到的reducer;</p></li>
+</ul>
+</li>
+</ul>
+<p>在map和reduce阶段之间,一个MapReduce应用必然从mapper任务得到输出结果,并把这些结果发布给reducer任务.该过程通常被称为洗牌(shuffling),因为在单节点上的mapper输出可能被送往分布在集群多个节点上的reducer.</p>
+</div>
+<div class="section" id="combiner-reduce">
+<span id="header-n301"></span><h3>3.6 Combiner: 本地reduce<a class="headerlink" href="#combiner-reduce" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>在许多MapReduce应用场景中,不妨在分发mapper结果之前做一下”本地Reduce”.</p>
+</div></blockquote>
+<p>预定义Mapper和Reducer类的WordCount:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount2</span> <span class="p">{</span>
+     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+             <span class="n">JobClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobClient</span><span class="p">();</span>
+             <span class="n">JobConf</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JobConf</span><span class="p">(</span><span class="n">WordCount2</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+             <span class="n">FileInputFormat</span><span class="p">.</span><span class="na">addInputPath</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="k">new</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">));</span>
+             <span class="n">FileOutputFormat</span><span class="p">.</span><span class="na">setOutputPath</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="k">new</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">));</span>
+
+             <span class="n">conf</span><span class="p">.</span><span class="na">setOutputKeyClass</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+             <span class="n">conf</span><span class="p">.</span><span class="na">setOutputValueClass</span><span class="p">(</span><span class="n">LongWritable</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+             <span class="n">conf</span><span class="p">.</span><span class="na">setMapperClass</span><span class="p">(</span><span class="n">TokenCountMapper</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+             <span class="n">conf</span><span class="p">.</span><span class="na">setCombinerClass</span><span class="p">(</span><span class="n">LongSumReducer</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+             <span class="n">conf</span><span class="p">.</span><span class="na">setReducerClass</span><span class="p">(</span><span class="n">LongSumReducer</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+             <span class="n">client</span><span class="p">.</span><span class="na">setConf</span><span class="p">(</span><span class="n">conf</span><span class="p">);</span>
+             <span class="k">try</span> <span class="p">{</span>
+                     <span class="n">JobClient</span><span class="p">.</span><span class="na">runJob</span><span class="p">(</span><span class="n">conf</span><span class="p">);</span>
+             <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+                     <span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+             <span class="p">}</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="header-n312">
+<span id="id25"></span><h2>4.读/写<a class="headerlink" href="#header-n312" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="database_optimization.html" class="btn btn-neutral float-right" title="数据库优化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data_directory.html" class="btn btn-neutral float-left" title="数据库数据字典" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, wangzf
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

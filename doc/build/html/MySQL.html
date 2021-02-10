@@ -1,0 +1,632 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-cn" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MySQL 操作总结 &mdash; test vtest</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="数据库数据字典" href="data_directory.html" />
+    <link rel="prev" title="Welcome to bigdata’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> database
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MySQL 操作总结</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">1.MySQL 建立表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2.MySQL 约束</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.1 主键</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2.1.1 主键介绍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">2.1.2 主键规则</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2.2 外键</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id7">2.2.1 外键介绍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">2.2.2 外键规则</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">2.2.3 创建外键</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.2.4 删除外键</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">3.MySQL 索引</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">3.1 索引介绍</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">3.1.1 索引</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">3.1.2 为什么要使用索引</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">3.1.3 索引的优缺点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">3.1.4 索引的类型</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">3.2 建立索引</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id20">3.2.1 创建索引的语法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">3.2.2 创建普通索引</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">3.2.3 创建唯一索引</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">3.3 查看索引</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">3.4 删除索引</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#drop-index">3.4.1 使用 <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">INDEX</span></code> 语句</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id25">3.4.2 使用 <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> 语句</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_directory.html">数据库数据字典</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Hadoop.html">Hadoop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database_optimization.html">数据库优化</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">database</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>MySQL 操作总结</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/MySQL.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mysql">
+<h1>MySQL 操作总结<a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a></h1>
+<p>MySQL是一个关系型数据库管理系统，也是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件。</p>
+<div class="section" id="id1">
+<h2>1.MySQL 建立表<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="id2">
+<h2>2.MySQL 约束<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>在 MySQL 中，约束是指对表中数据的一种约束，能够帮助数据库管理员更好地管理数据库，并且能够确保数据库中数据的正确性和有效性。</p>
+<p>在 MySQL 中，主要支持以下 6 中约束：</p>
+<blockquote>
+<div><ul>
+<li><p><strong>主键约束</strong> (<code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>主键约束是使用最频繁的约束。在设计数据表时，一般情况下，都会要求表中设置一个主键</p></li>
+<li><p>主键是表的一个特殊字段，该字段能唯一标识表中的每条信息</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>外键约束</strong> (<code class="docutils literal notranslate"><span class="pre">FOREIGN</span> <span class="pre">KEY</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>外键约束经常和主键一起使用，用来确保数据的一致性</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>唯一约束</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>唯一约束与主键约束有一个相似的地方，就是它们都能够确保列的唯一性。</p></li>
+<li><p>与主键约束不同的是，唯一约束在一个表中可以有多个，并且设置唯一约束的列是允许有空值的，虽然只能有一个空值</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>检查约束</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>检查约束是用来检查数据表中，字段值是否有效的一个手段</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>非空约束</strong> (<code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">NULL</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>非空约束用来约束表中的字段不能为空</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>默认值约束</strong> (<code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>默认值约束用来约束当数据表中某个字段不输入值时，自动为其添加一个已经设置好的值</p></li>
+<li><p>默认值约束通常用在已经设置了非空约束的列，这样能够防止数据表在录入数据时出现错误</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>以上 6 种约束中，一个数据表中只能有一个主键约束，其它约束可以有多个</p>
+</div>
+<div class="section" id="id3">
+<h3>2.1 主键<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h4>2.1.1 主键介绍<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>主键(<code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>)的完整称呼是 “主键约束”，是 MySQL 中使用最为频繁的约束。
+一般情况下，为了便于 DBMS 更快的查找到表中的记录，都会在表中设置一个主键。</p>
+<p>主键分为单字段主键和多字段联合主键，本节将分别讲解这两种主键约束的创建、修改和删除。</p>
+</div></blockquote>
+</div>
+<div class="section" id="id5">
+<h4>2.1.2 主键规则<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>每个表只能定义一个主键</p></li>
+<li><p>主键值必须唯一标识表中的每一行，且不能为 NULL，即表中不可能存在有相同主键值的两行数据。这是唯一性原则</p></li>
+<li><p>一个字段名只能在联合主键字段表中出现一次</p></li>
+<li><p>联合主键不能包含不必要的多余字段。当把联合主键的某一字段删除后，如果剩下的字段构成的主键仍然满足唯一性原则，那么这个联合主键是不正确的。这是最小化原则</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>2.2 外键<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h4>2.2.1 外键介绍<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>MySQL 外键约束(<code class="docutils literal notranslate"><span class="pre">FOREIGN</span> <span class="pre">KEY</span></code>)是表的一个特殊字段，经常与主键约束一起使用。
+对于两个具有关联关系的表而言，相关联字段中主键所在的表就是主表(父表)，外键所在的表就是从表(子表)。</p>
+<p>外键用来建立主表与从表的关联关系，为两个表的数据建立连接，约束两个表中数据的一致性和完整性。</p>
+<p>主表删除某条记录时，从表中与之对应的记录也必须有相应的改变。
+一个表可以有一个或多个外键，外键可以为空值，若不为空值，则每一个外键的值必须等于主表中主键的某个值。</p>
+</div></blockquote>
+</div>
+<div class="section" id="id8">
+<h4>2.2.2 外键规则<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>主表必须已经存在于数据库中，或者是当前正在创建的表。如果是后一种情况，则主表与从表是同一个表，这样的表称为自参照表，这种结构称为自参照完整性。</p></li>
+<li><p>必须为主表定义主键</p></li>
+<li><p>主键不能包含空值，但允许在外键中出现空值。也就是说，只要外键的每个非空值出现在指定的主键中，这个外键的内容就是正确的。</p></li>
+<li><p>在主表的表名后面指定列名或列名的组合。这个列或列的组合必须是主表的主键或候选键。</p></li>
+<li><p>外键中列的数目必须和主表的主键中列的数目相同。</p></li>
+<li><p>外键中列的数据类型必须和主表主键中对应列的数据类型相同。</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id9">
+<h4>2.2.3 创建外键<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id10">
+<h5>(1)在创建表时设置外键约束<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[CONSTRAINT &lt;外键名&gt;] FOREIGN KEY 字段名 [，字段名2，…]
+REFERENCES &lt;主表名&gt; 主键列1 [，主键列2，…]
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id11">
+<h5>(2)在修改表时添加外键约束<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="o">&lt;</span><span class="n">数据表名</span><span class="o">&gt;</span> <span class="n">ADD</span> <span class="n">CONSTRAINT</span> <span class="o">&lt;</span><span class="n">外键名</span><span class="o">&gt;</span>
+<span class="n">FOREIGN</span> <span class="n">KEY</span><span class="p">(</span><span class="o">&lt;</span><span class="n">列名</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">REFERENCES</span> <span class="o">&lt;</span><span class="n">主表名</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">列名</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id12">
+<h4>2.2.4 删除外键<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>当一个表中不需要外键约束时，就需要从表中将其删除。外键一旦删除，就会解除主表和从表间的关联关系。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="o">&lt;</span><span class="n">表名</span><span class="o">&gt;</span> <span class="n">DROP</span> <span class="n">FOREIGN</span> <span class="n">KEY</span> <span class="o">&lt;</span><span class="n">外键约束名</span><span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+</div>
+<div class="section" id="id13">
+<h2>3.MySQL 索引<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id14">
+<h3>3.1 索引介绍<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h4>3.1.1 索引<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<p>索引是一种特殊的数据库结构，由数据表中的一列或多列组合而成，可以用来快速查询数据表中有某一特定值的记录</p>
+<p>通过索引，查询数据时不用读完记录的所有信息，而只是查询索引列。否则，数据库系统将读取每条记录的所有信息进行匹配。</p>
+<p>可以把索引比作新华字典的音序表。例如，要查“库”字，如果不使用音序，就需要从字典的 400 页中逐页来找。
+但是，如果提取拼音出来，构成音序表，就只需要从 10 多页的音序表中直接查找。这样就可以大大节省时间。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MySQL 会自动为所有表的主键进行索引，但是外键字段必须由用户进行明确的索引</p>
+</div>
+</div>
+<div class="section" id="id16">
+<h4>3.1.2 为什么要使用索引<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+<p>索引就是根据表中的一列或若干列按照一定顺序建立的列值与记录行之间的对应关系表，
+实质上是一张描述索引列的列值与原表中记录行之间一一对应关系的有序表。</p>
+<p>索引是 MySQL 中十分重要的数据库对象，是数据库性能调优技术的基础，常用于实现数据的快速检索。</p>
+<p>在 MySQL 中，通常有以下两种方式访问数据库表的行数据：</p>
+<blockquote>
+<div><ul>
+<li><ol class="arabic simple">
+<li><p>顺序访问</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>顺序访问是在表中实行全表扫描，从头到尾逐行遍历，直到在无序的行数据中找到符合条件的目标数据。</p></li>
+<li><p>顺序访问实现比较简单，但是当表中有大量数据的时候，效率非常低下。例如，在几千万条数据中查找少量的数据时，
+使用顺序访问方式将会遍历所有的数据，花费大量的时间，显然会影响数据库的处理性能。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>索引访问</p></li>
+</ol>
+<blockquote>
+<div><ul>
+<li><p>索引访问是通过遍历索引来直接访问表中记录行的方式。</p></li>
+<li><p>使用这种方式的前提是对表建立一个索引，在列上创建了索引之后，查找数据时可以直接根据该列上的索引找到对应记录行的位置，从而快捷地查找到数据。索引存储了指定列数据值的指针，根据指定的排序顺序对这些指针排序。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>例如，在学生基本信息表 tb_students 中，如果基于 student_id 建立了索引，系统就建立了一张索引列到实际记录的映射表。当用户需要查找 student_id 为 12022 的数据的时候，系统先在 student_id 索引上找到该记录，然后通过映射表直接找到数据行，并且返回该行数据。因为扫描索引的速度一般远远大于扫描实际数据行的速度，所以采用索引的方式可以大大提高数据库的工作效率。</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>简而言之，不使用索引，MySQL 就必须从第一条记录开始读完整个表，直到找出相关的行。
+表越大，查询数据所花费的时间就越多。如果表中查询的列有一个索引，MySQL 就能快速到达一个位置去搜索数据文件，
+而不必查看所有数据，这样将会节省很大一部分时间。</p>
+</div>
+<div class="section" id="id17">
+<h4>3.1.3 索引的优缺点<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<p>索引有其明显的优势，也有其不可避免的缺点。</p>
+<blockquote>
+<div><ul>
+<li><p>优点</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>通过创建唯一索引可以保证数据库表中每一行数据的唯一性。</p></li>
+<li><p>可以给所有的 MySQL 列类型设置索引。</p></li>
+<li><p>可以大大加快数据的查询速度，这是使用索引最主要的原因。</p></li>
+<li><p>在实现数据的参考完整性方面可以加速表与表之间的连接。</p></li>
+<li><p>在使用分组和排序子句进行数据查询时也可以显著减少查询中分组和排序的时间</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>缺点</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>创建和维护索引组要耗费时间，并且随着数据量的增加所耗费的时间也会增加。</p></li>
+<li><p>索引需要占磁盘空间，除了数据表占数据空间以外，每一个索引还要占一定的物理空间。如果有大量的索引，索引文件可能比数据文件更快达到最大文件尺寸。</p></li>
+<li><p>当对表中的数据进行增加、删除和修改的时候，索引也要动态维护，这样就降低了数据的维护速度。</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>使用索引时，需要综合考虑索引的优点和缺点。</p>
+<p>索引可以提高查询速度，但是会影响插入记录的速度。因为，向有索引的表中插入记录时，数据库系统会按照索引进行排序，
+这样就降低了插入记录的速度，插入大量记录时的速度影响会更加明显。这种情况下，最好的办法是先删除表中的索引，
+然后插入数据，插入完成后，再创建索引。</p>
+</div>
+</div>
+<div class="section" id="id18">
+<h4>3.1.4 索引的类型<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id19">
+<h3>3.2 建立索引<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<p>MySQL 提供了三种创建索引的方法</p>
+<div class="section" id="id20">
+<h4>3.2.1 创建索引的语法<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="create-index">
+<h5>(1)使用 <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">INDEX</span></code> 语句<a class="headerlink" href="#create-index" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="o">&lt;</span><span class="n">索引名</span><span class="o">&gt;</span> <span class="n">ON</span> <span class="o">&lt;</span><span class="n">表名</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">列名</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">长度</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span> <span class="n">ASC</span> <span class="o">|</span> <span class="n">DESC</span><span class="p">])</span>
+</pre></div>
+</div>
+<ul>
+<li><p>语法说明如下：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;索引名&gt;</span></code>：指定索引名。一个表可以创建多个索引，但每个索引在该表中的名称是唯一的。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;表名&gt;</span></code>：指定要创建索引的表名。</p></li>
+</ul>
+<p>-`` &lt;列名&gt;``：指定要创建索引的列名。通常可以考虑将查询语句中在 JOIN 子句和 WHERE 子句里经常出现的列作为索引列。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;长度&gt;</span></code>：可选项。指定使用列前的 length 个字符来创建索引。使用列的一部分创建索引有利于减小索引文件的大小，节省索引列所占的空间。在某些情况下，只能对列的前缀进行索引。索引列的长度有一个最大上限 255 个字节（MyISAM 和 InnoDB 表的最大上限为 1000 个字节），如果索引列的长度超过了这个上限，就只能用列的前缀进行索引。另外，BLOB 或 TEXT 类型的列也必须使用前缀索引。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ASC|DESC</span></code>：可选项。ASC指定索引按照升序来排列，DESC指定索引按照降序来排列，默认为ASC。</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="create-table">
+<h5>(2)使用 <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code>  语句<a class="headerlink" href="#create-table" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>-- 在 CREATE TABLE 语句中添加此语句，表示在创建新表的同时创建该表的主键。
+CONSTRAINT PRIMARY KEY [索引类型] (&lt;列名&gt;,…)
+
+-- 在 CREATE TABLE 语句中添加此语句，表示在创建新表的同时创建该表的索引。
+KEY | INDEX [&lt;索引名&gt;] [&lt;索引类型&gt;] (&lt;列名&gt;,…)
+
+-- 在 CREATE TABLE 语句中添加此语句，表示在创建新表的同时创建该表的唯一性索引。
+UNIQUE [ INDEX | KEY] [&lt;索引名&gt;] [&lt;索引类型&gt;] (&lt;列名&gt;,…)
+
+-- 在 CREATE TABLE 语句中添加此语句，表示在创建新表的同时创建该表的外键。
+FOREIGN KEY &lt;索引名&gt; &lt;列名&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>在使用 CREATE TABLE 语句定义列选项的时候，可以通过直接在某个列定义后面添加 PRIMARY KEY 的方式创建主键。
+而当主键是由多个列组成的多列索引时，则不能使用这种方法，只能用在语句的最后加上一个 PRIMARY KRY(&lt;列名&gt;，…)
+子句的方式来实现。</p>
+</div>
+</div>
+<div class="section" id="alter-table">
+<h5>(3)使用 <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> 语句<a class="headerlink" href="#alter-table" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>-- 在 ALTER TABLE 语句中添加此语法成分，表示在修改表的同时为该表添加索引。
+ADD INDEX [&lt;索引名&gt;] [&lt;索引类型&gt;] (&lt;列名&gt;,…)
+
+-- 在 ALTER TABLE 语句中添加此语法成分，表示在修改表的同时为该表添加主键。
+ADD PRIMARY KEY [&lt;索引类型&gt;] (&lt;列名&gt;,…)
+
+-- 在 ALTER TABLE 语句中添加此语法成分，表示在修改表的同时为该表添加唯一性索引。
+ADD UNIQUE [ INDEX | KEY] [&lt;索引名&gt;] [&lt;索引类型&gt;] (&lt;列名&gt;,…)
+
+-- 在 ALTER TABLE 语句中添加此语法成分，表示在修改表的同时为该表添加外键。
+ADD FOREIGN KEY [&lt;索引名&gt;] (&lt;列名&gt;,…)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id21">
+<h4>3.2.2 创建普通索引<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>创建普通索引时，通常使用 INDEX 关键字。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="p">(</span>
+    <span class="n">id</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">dept_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">age</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">height</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">INDEX</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id22">
+<h4>3.2.3 创建唯一索引<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>创建唯一索引，通常使用 UNIQUE 参数。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="p">(</span>
+    <span class="n">id</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">dept_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">age</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">height</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">UNIQUE</span> <span class="k">INDEX</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id23">
+<h3>3.3 查看索引<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>索引创建完成后，可以利用 SQL 语句查看已经存在的索引。在 MySQL 中，可以使用 SHOW INDEX 语句查看表中创建的索引。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">INDEX</span> <span class="n">FROM</span> <span class="o">&lt;</span><span class="n">表名</span><span class="o">&gt;</span> <span class="p">[</span> <span class="n">FROM</span> <span class="o">&lt;</span><span class="n">数据库名</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id24">
+<h3>3.4 删除索引<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>删除索引是指将表中已经存在的索引删除掉。不用的索引建议进行删除，因为它们会降低表的更新速度，影响数据库的性能。
+对于这样的索引，应该将其删除。</p>
+</div></blockquote>
+<div class="section" id="drop-index">
+<h4>3.4.1 使用 <code class="docutils literal notranslate"><span class="pre">DROP</span> <span class="pre">INDEX</span></code> 语句<a class="headerlink" href="#drop-index" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DROP</span> <span class="n">INDEX</span> <span class="o">&lt;</span><span class="n">索引名</span><span class="o">&gt;</span> <span class="n">ON</span> <span class="o">&lt;</span><span class="n">表名</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id25">
+<h4>3.4.2 使用 <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> 语句<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+<p>根据 ALTER TABLE 语句的语法可知，该语句也可以用于删除索引。具体使用方法是将 <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">TABLE</span></code> 语句的语法中部分指定为以下子句中的某一项。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>DROP PRIMARY KEY：表示删除表中的主键。一个表只有一个主键，主键也是一个索引。</p></li>
+<li><p>DROP INDEX index_name：表示删除名称为 index_name 的索引。</p></li>
+<li><p>DROP FOREIGN KEY fk_symbol：表示删除外键。</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_directory.html" class="btn btn-neutral float-right" title="数据库数据字典" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to bigdata’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, wangzf
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

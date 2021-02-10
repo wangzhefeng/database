@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-cn" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>数据库优化 &mdash; test vtest</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Hadoop" href="Hadoop.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> database
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="MySQL.html">MySQL 操作总结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_directory.html">数据库数据字典</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Hadoop.html">Hadoop</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">数据库优化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#header-n454">数据库</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header-n462">数据库优化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#header-n478">1. 数据库引擎优化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#header-n480">2. 表结构优化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#header-n482">常识：</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n483">优化：</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sql">3. SQL语句优化</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#header-n491">常识：</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#header-n496">优化：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">database</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>数据库优化</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/database_optimization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="header-n450">
+<span id="id1"></span><h1>数据库优化<a class="headerlink" href="#header-n450" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="header-n454">
+<span id="id2"></span><h2>数据库<a class="headerlink" href="#header-n454" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>MySQL</p></li>
+<li><p>Oracle</p></li>
+<li><p>Sql Server</p></li>
+</ul>
+</div>
+<div class="section" id="header-n462">
+<span id="id3"></span><h2>数据库优化<a class="headerlink" href="#header-n462" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>数据库引擎优化</p></li>
+<li><p>表结构优化</p>
+<ul class="simple">
+<li><p>索引</p></li>
+<li><p>游标</p></li>
+<li><p>临时表</p></li>
+</ul>
+</li>
+<li><p>SQL语句优化</p></li>
+</ol>
+<div class="section" id="header-n478">
+<span id="id4"></span><h3>1. 数据库引擎优化<a class="headerlink" href="#header-n478" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="header-n480">
+<span id="id5"></span><h3>2. 表结构优化<a class="headerlink" href="#header-n480" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="header-n482">
+<span id="id6"></span><h4>常识：<a class="headerlink" href="#header-n482" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="header-n483">
+<span id="id7"></span><h4>优化：<a class="headerlink" href="#header-n483" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>在<code class="docutils literal notranslate"><span class="pre">where</span></code>，<code class="docutils literal notranslate"><span class="pre">order</span> <span class="pre">by</span></code>涉及的字段上建立索引</p></li>
+<li><p>索引并不是越多越好，索引固然可以提高相应的 select
+的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update
+时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有必要</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="sql">
+<span id="header-n490"></span><h3>3. SQL语句优化<a class="headerlink" href="#sql" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="header-n491">
+<span id="id8"></span><h4>常识：<a class="headerlink" href="#header-n491" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>定长字段中NULL也占空间</p></li>
+</ul>
+</div>
+<div class="section" id="header-n496">
+<span id="id9"></span><h4>优化：<a class="headerlink" href="#header-n496" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>WHERE 语句</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>尽量避免全表扫描</p>
+<ul class="simple">
+<li><p>措施：用<code class="docutils literal notranslate"><span class="pre">where</span></code>语句进行筛选；</p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中对字段进行<code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">null</span></code>判断</p>
+<ul class="simple">
+<li><p>后果：将导致引擎放弃使用索引而进行全表扫描；</p></li>
+<li><p>措施：最好不要给数据库留NULL，尽可能使用NOT NULL填充数据库；</p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中使用<code class="docutils literal notranslate"><span class="pre">!=</span></code>操作符</p>
+<ul class="simple">
+<li><p>后果：将导致引擎放弃使用索引而进行全表扫描；</p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中使用<code class="docutils literal notranslate"><span class="pre">or</span></code>连接条件</p>
+<ul class="simple">
+<li><p>后果：如果一个字段有索引，一个字段没有索引，将导致引擎放弃使用索引而进行全表扫描；</p></li>
+<li><p>措施：使用<code class="docutils literal notranslate"><span class="pre">union</span> <span class="pre">all</span></code></p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中使用<code class="docutils literal notranslate"><span class="pre">in</span></code>和<code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">in</span></code></p>
+<ul class="simple">
+<li><p>后果：将导致引擎放弃使用索引而进行全表扫描；</p></li>
+<li><p>措施：</p>
+<ul>
+<li><p>连续值使用<code class="docutils literal notranslate"><span class="pre">&gt;,</span> <span class="pre">&lt;,</span> <span class="pre">&gt;=,</span> <span class="pre">&lt;=</span></code>或者<code class="docutils literal notranslate"><span class="pre">between</span></code>；</p></li>
+<li><p>用<code class="docutils literal notranslate"><span class="pre">exists</span></code>代替<code class="docutils literal notranslate"><span class="pre">in</span></code>，或用<code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">exists</span></code>代替<code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">in</span></code>；</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中使用参数</p>
+<ul class="simple">
+<li><p>后果：全表扫描；</p></li>
+<li><p>措施：强制查询使用索引；<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">*</span> <span class="pre">from</span> <span class="pre">t</span> <span class="pre">with(index(索引名))</span> <span class="pre">where</span> <span class="pre">num</span> <span class="pre">=</span> <span class="pre">&#64;num</span></code>；</p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中<code class="docutils literal notranslate"><span class="pre">=</span></code>左边对字段进行函数、算数运算、或其他表达式操作</p>
+<ul class="simple">
+<li><p>后果：将导致引擎放弃使用索引而进行全表扫描；</p></li>
+<li><p>措施：对表达式进行转换；<code class="docutils literal notranslate"><span class="pre">where</span> <span class="pre">num</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">100</span></code> =&gt;
+<code class="docutils literal notranslate"><span class="pre">where</span> <span class="pre">num</span> <span class="pre">=</span> <span class="pre">100</span> <span class="pre">*</span> <span class="pre">2</span></code>；</p></li>
+</ul>
+</li>
+<li><p>尽量避免在<code class="docutils literal notranslate"><span class="pre">where</span></code>子句中对字段进行函数操作</p>
+<ul class="simple">
+<li><p>后果：将导致引擎放弃使用索引而进行全表扫描；</p></li>
+<li><p>措施：使用其他筛选条件</p></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<div><p>JOIN</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>对多张表进行<code class="docutils literal notranslate"><span class="pre">join</span></code>操作，要先分页再join</p></li>
+</ol>
+<blockquote>
+<div><p>字段类型</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>尽可能的使用 varchar/nvarchar 代替 char/nchar
+，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些</p></li>
+<li><p>尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。这是因为引擎在处理查询和连
+接时会逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了</p></li>
+</ol>
+<blockquote>
+<div><p>索引使用</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>在使用索引字段作为条件时，如果该索引是复合索引，那么必须使用到该索引中的第一个字段作为条件时才能保证系统使用该索引，否则该索引将不会被使用，并且应尽可能的让字段顺序与索引顺序相一致</p></li>
+<li><p>应尽可能的避免更新 clustered 索引数据列，因为 clustered
+索引数据列的顺序就是表记录的物理存储顺序，一旦该列值改变将导致整个表记录的顺序的调整，会耗费相当大的资源。若应用系统需要频繁更新
+clustered 索引数据列，那么需要考虑是否应将该索引建为 clustered 索引</p></li>
+</ol>
+<blockquote>
+<div><p>游标使用</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>尽量避免使用游标，因为游标的效率较差</p></li>
+</ol>
+<blockquote>
+<div><p>临时表使用</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先
+truncate table ，然后 drop table ，这样可以避免系统表的较长时间锁定</p></li>
+<li><p>在新建临时表时，如果一次性插入数据量很大，那么可以使用 select into
+代替 create table，避免造成大量 log
+，以提高速度；如果数据量不大，为了缓和系统表的资源，应先create
+table，然后insert</p></li>
+<li><p>避免频繁创建和删除临时表，以减少系统表资源的消耗。临时表并不是不可使用，适当地使用它们可以使某些例程更有效，例如，当需要重复引用大型表或常用表中的某个数据集时。但是，对于一次性事件，
+最好使用导出表</p></li>
+</ol>
+<blockquote>
+<div><p>表变量使用</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li></li>
+</ol>
+<blockquote>
+<div><p>存储过程</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="Hadoop.html" class="btn btn-neutral float-left" title="Hadoop" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, wangzf
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

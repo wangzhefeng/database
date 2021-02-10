@@ -1,0 +1,5 @@
+$ redis-cli
+$ redis-cli -a wangzhefeng
+
+set 'key' 'value'
+get 'key'

@@ -1,0 +1,9 @@
+{
+    "path" : "E:/DataScience/noSQL/MongoDB/R-rmongodb",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
